@@ -12,7 +12,7 @@ app.use(authRoutes);
 
 
 
-const mongoUri = 'mongodb+srv://admin:plun@cluster0.paes2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const mongoUri = 'mongodb+srv://admin:plun@cluster0.1eoby.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 mongoose.connect(mongoUri, {
     
    useNewUrlParser: true,
