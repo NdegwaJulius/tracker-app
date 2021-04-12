@@ -13,21 +13,22 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.pre('save', function (){
+userSchema.pre('save', function(next) {
     const user = this;
-    if (!user.isModified('modified')){
+    if (!user.isModified('password')){
         return next();
 
     }
-    bcrypt.genSalt(10, (err, salt) =>{
+    bcrypt.genSalt(10, (err, salt) => {
         if (err) {
             return next(err);
         }
-        bcrypt.hash(user.password, salt, (err, hash) =>{
+        bcrypt.hash(user.password, salt, (err, hash) => {
             if (err){
-                user.password = hash;
-                next();
+               return next(err);
             }
+            user.password = hash;
+            next();
         });
     });
 
@@ -35,8 +36,8 @@ userSchema.pre('save', function (){
 
 userSchema.methods.comparePassword = function(candidatePassword) {
     const user = this;
-    return new Promise ((resolve, reject) =>{
-        bcrypt.compare(candidatePassword,user.password,(err,isMatch) =>{
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(candidatePassword, user.password, (err, isMatch) =>{
             if (err) {
                 return reject(err);
             }
@@ -47,7 +48,6 @@ userSchema.methods.comparePassword = function(candidatePassword) {
         });
 
     });
-
 }
 
 mongoose.model('User' , userSchema);
